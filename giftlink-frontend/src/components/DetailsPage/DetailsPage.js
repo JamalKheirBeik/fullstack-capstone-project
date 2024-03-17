@@ -21,7 +21,13 @@ function DetailsPage() {
         const fetchGift = async () => {
             try {
                 // Task 2: Fetch gift details
-                const response = await fetch(`${urlConfig.backendUrl}/api/gifts/${productId}`);
+                const url = `${urlConfig.backendUrl}/api/gifts/${productId}`;
+                const options = {
+                    headers: {
+                        "access-control-allow-origin": "*"
+                    }
+                };
+                const response = await fetch(url, options);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -113,7 +119,7 @@ function DetailsPage() {
             <div className="comments-section mt-4">
                 <h3 className="mb-3">Comments</h3>
                 {/* Task 7: Render comments section by using the map function to go through all the comments */}
-                {comments.map((comment) => (
+                {comments.map((comment, index) => (
                     <div key={index} className="card mb-3">
                         <div className="card-body">
                             <p className="comment-author"><strong>{comment.author}:</strong></p>

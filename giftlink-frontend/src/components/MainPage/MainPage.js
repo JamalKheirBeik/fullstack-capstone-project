@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {urlConfig} from '../../config';
+import { urlConfig } from '../../config';
 
 function MainPage() {
     const [gifts, setGifts] = useState([]);
@@ -10,8 +10,13 @@ function MainPage() {
         const fetchGifts = async () => {
             try {
                 const url = `${urlConfig.backendUrl}/api/gifts/`;
-                const response = await fetch(url);
-                if(!response.ok){
+                const options = {
+                    headers: {
+                        "access-control-allow-origin": "*"
+                    }
+                };
+                const response = await fetch(url, options);
+                if (!response.ok) {
                     throw new Error(`HTTP error; ${response.status}`);
                 }
                 const data = await response.json();
