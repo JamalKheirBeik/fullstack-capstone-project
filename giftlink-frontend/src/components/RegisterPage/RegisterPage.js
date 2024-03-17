@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AuthContext';
+import { urlConfig } from '../../config';
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -7,9 +10,42 @@ function RegisterPage() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // insert code here to create handleRegister function and include console.log
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
+    // insert code here to create handleRegister function
     const handleRegister = async () => {
-        console.log("Register invoked")
+        try {
+            const url = `${urlConfig.backendUrl}/api/auth/register`;
+            const options = {
+                methods: "POST",
+                headers: {
+                    "access-control-allow-origin": "*",
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName, lastName, email, password
+                })
+            };
+            const response = await fetch(url, options);
+            const json = await response.json();
+            console.log('json data', json);
+            console.log('er', json.error);
+
+            if (json.authtoken) {
+                sessionStorage.setItem('auth-token', json.authtoken);
+                sessionStorage.setItem('name', firstName);
+                sessionStorage.setItem('email', json.email);
+                setIsLoggedIn(true);
+                navigate('/app');
+            }
+            if (json.error) {
+                setError(json.error);
+            }
+        } catch (error) {
+            console.log('Error:', error.message);
+            setError('Something went wrong! Please try again');
+        }
     }
 
     return (
@@ -57,6 +93,8 @@ function RegisterPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+
+                            <div className="text-danger">{error}</div>
                         </ div>
                         <div className="mb-4">
                             <label htmlFor="password" className="form label">Password</label>
