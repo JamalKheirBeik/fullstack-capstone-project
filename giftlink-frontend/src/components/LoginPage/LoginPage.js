@@ -22,7 +22,7 @@ function LoginPage() {
         try {
             const url = `${urlConfig.backendUrl}/api/auth/login`;
             const options = {
-                methods: "POST",
+                method: "POST",
                 headers: {
                     "access-control-allow-origin": "*",
                     'content-type': 'application/json',

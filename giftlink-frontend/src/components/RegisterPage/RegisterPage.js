@@ -18,7 +18,7 @@ function RegisterPage() {
         try {
             const url = `${urlConfig.backendUrl}/api/auth/register`;
             const options = {
-                methods: "POST",
+                method: "POST",
                 headers: {
                     "access-control-allow-origin": "*",
                     'content-type': 'application/json'
